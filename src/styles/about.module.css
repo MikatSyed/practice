@@ -11,6 +11,9 @@
 .aboutHome {
   height: auto;
 }
+.aboutHome .text {
+  padding-left: 2rem;
+}
 .aboutHome #heading {
   text-align: left;
   padding: 0;
@@ -56,12 +59,14 @@
   color: #fff;
 }
 
+
 /* ... your existing styles ... */
 
 .aboutHome .left img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  padding-right: 1rem;
 }
 
 /* Add a new media query for screens with a maximum width of 768 pixels */

@@ -64,9 +64,9 @@ const LoginPage = () => {
                 label="Password"
               />
             </div>
-            <Button  htmlType="submit">
+            <button  type="submit"  className="btn1">
               Login
-            </Button>
+            </button>
           </Form>
         </div>
         <div

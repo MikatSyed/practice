@@ -3,11 +3,10 @@ import React from "react"
 import FeaturedCard from "./FeaturedCard"
 import Heading from "../Hero/Heading"
 import styles from "../../styles/category.module.css";
-import { getAllCategories } from "@/lib/fetch";
+// import { getAllCategories } from "@/lib/fetch";
+import {categoryData} from "./data"
 const FeaturedCategory = async() => {
 
-  const categories = await getAllCategories()
-  const categoryData = categories?.data;
   return (
     <>
      

@@ -93,7 +93,7 @@ const RegisterPage = () => {
                 </div>
                
               </div>
-              <Button htmlType="submit">Registration</Button>
+              <button type="submit" className="btn1">Registration</button>
             </Form>
           </div>
           <div style={{ marginTop: "15px", textAlign: "center" }}>
