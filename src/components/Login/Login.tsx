@@ -8,6 +8,9 @@ import { SubmitHandler } from "react-hook-form";
 import { authSchema } from "@/schemas/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Link from "next/link";
+import { useUserLoginMutation } from "@/redux/api/authApi";
+import { useRouter } from "next/navigation";
+import { storeUserInfo } from "../../../services/auth.service";
 
 
 
@@ -17,12 +20,20 @@ type FormValues = {
 };
 
 const LoginPage = () => {
- 
+  const [userLogin] = useUserLoginMutation();
+  const {push} = useRouter();
+
 
   const onSubmit: SubmitHandler<FormValues> = async (data: any) => {
    
     try {
-    
+       const res = await userLogin({ ...data }).unwrap();
+       console.log(res);
+       storeUserInfo({ accessToken: res?.token });
+         if (res?.token) {  
+          push("/profile");
+        
+      }
     } catch (err: any) {
      
     }

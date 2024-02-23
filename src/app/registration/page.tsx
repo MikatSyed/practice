@@ -1,33 +1,58 @@
 "use client";
-import { Button, Col, Row } from "antd";
+import { Button, Col, Row, message } from "antd";
 import signupLogo from "../../assets/Sign up-amico.png";
 import Image from "next/image";
 import Form from "@/components/Forms/Form";
 import FormInput from "@/components/Forms/FormInput";
+
+import {
+  useRegistrationMutation,
+  
+} from "@/redux/api/authApi";
+import { useRouter } from "next/navigation";
 import { yupResolver } from "@hookform/resolvers/yup";
+import toast, { Toaster } from "react-hot-toast";
 import Link from "next/link";
+import { useState } from "react";
 import { adminSchema } from "@/schemas/admin";
 
 
 const RegisterPage = () => {
+  const {push} = useRouter()
+  const [registration] = useRegistrationMutation();
 
-
- 
+  // const departments:IDepartment[]= data?.departments;
 
   const onSubmit = async (values: any) => {
-
-   
+    const obj = { ...values };
+    obj.role = "user";
+    obj.profileImg = "demo url"
     try {
-     
+      const res = await registration(obj).unwrap();
+      toast(res?.message, {
+        icon: <span style={{ color: "green" }}>✔</span>,
+        style: {
+          borderRadius: "10px",
+          background: "#FFBF00",
+          color: "#fff",
+        },
+      });
+      push("/login")
     } catch (err: any) {
-     
-      
+      toast(err?.data, {
+        icon: <span style={{ color: "white" }}>❌</span>,
+        style: {
+          borderRadius: "10px",
+          background: "red",
+          color: "#fff",
+        },
+      });
     }
   };
-
+ 
   return (
    <>
-    
+    <Toaster position="top-right" reverseOrder={false} />
       <Row justify="center" align="middle" style={{ minHeight: "100vh" }}>
         <Col xs={{ span: 0 }} sm={{ span: 0 }} md={{ span: 16 }} lg={{ span: 10 }}>
           <Image src={signupLogo} width={500} height={500} alt="login image" />
@@ -87,13 +112,13 @@ const RegisterPage = () => {
                     multiple
                     type="file"
                     name="avatar"
-                  
+                    // onChange={createproductImagesChange}
                   />
                   
                 </div>
                
               </div>
-              <button type="submit" className="btn1">Registration</button>
+              <Button htmlType="submit">Registration</Button>
             </Form>
           </div>
           <div style={{ marginTop: "15px", textAlign: "center" }}>
