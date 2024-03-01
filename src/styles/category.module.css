@@ -1,9 +1,11 @@
+
 .featured .box {
 	box-shadow:  0 5px 25px -2px rgb(0 0 0 / 6%);
 	border-radius: 6px;
 	text-align: center;
 	padding: 30px;
 	cursor: pointer;
+	background: #fff;
   
   }
   .featured img {
@@ -15,7 +17,7 @@
   .background {
 	padding: 80px 0;
 	position: relative;
-	background: #fff;
+	background-color: #f6f9fc;
   }
   
   .container {

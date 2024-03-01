@@ -5,6 +5,8 @@
 	background-size: cover;
 	height: 90vh;
 	width: 100%;
+	border-bottom-left-radius: 20px;
+	border-bottom-right-radius: 20px;
   }
   .hero .container {
 	padding-top: 15%;
