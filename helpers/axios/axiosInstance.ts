@@ -1,17 +1,26 @@
-import { authKey } from "@/app/constants/storageKey";
+"use client"
+// import { authKey } from "@/app/constants/storageKey";
+import { authOptions } from "@/lib/AuthOptions";
 import { IGenericErrorResponse, ResponseSuccessType } from "@/types";
-import { getFromLocalStorage } from "@/utils/local-storage";
+// import { getFromLocalStorage } from "@/utils/local-storage";
 import axios from "axios";
+// import { getServerSession } from "next-auth";
+import { getSession } from "next-auth/react";
+
+
 
 const instance = axios.create()
 instance.defaults.headers.post["Content-Type"] = "application/json";
 instance.defaults.headers["Accept"] = "application/json";
-instance.defaults.timeout = 6000;
+instance.defaults.timeout = 30000;
 
 // Add a request interceptor
-instance.interceptors.request.use(function (config) {
+instance.interceptors.request.use(async function (config) {
     // Do something before request is sent
-    const accessToken = getFromLocalStorage(authKey)
+    const session : any = await getSession()
+    console.log(session,'20');
+    const accessToken = session?.token;
+    // console.log(accessToken,'accessToken');
     if(accessToken){
         config.headers.Authorization = accessToken;
     }
@@ -38,11 +47,11 @@ instance.interceptors.response.use(function (response) {
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     const responseObject:IGenericErrorResponse = {
-        statusCode: error?.response?.data?.statusCode || 500,
-        message:error?.response?.data?.message || "Something went wrong",
-        errorMessages:error?.response?.data?.message, 
+        statusCode: error?.response?.status || 500,
+        message: error?.response?.data?.message || error?.message || "Something went wrong...",
+        errorMessages: error?.response?.data?.errorMessages || [],
     }
-    return responseObject;
+    return Promise.reject(responseObject);
   });
 
 export {instance};

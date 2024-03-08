@@ -16,9 +16,16 @@ import Link from "next/link";
 import { useState } from "react";
 import { adminSchema } from "@/schemas/admin";
 
-
+interface ProductImage {
+  id: number;
+  url: string;
+}
 const RegisterPage = () => {
   const {push} = useRouter()
+  const [images, setImages] = useState<ProductImage[]>([]);
+  // console.log(images);
+
+  const [imagesPreview, setImagesPreview] = useState<string[]>([]);
   const [registration] = useRegistrationMutation();
 
   // const departments:IDepartment[]= data?.departments;
@@ -26,9 +33,15 @@ const RegisterPage = () => {
   const onSubmit = async (values: any) => {
     const obj = { ...values };
     obj.role = "user";
-    obj.profileImg = "demo url"
+    images.forEach((image) => {
+      obj.profileImg = image?.url;
+    });
+    message.loading("Creating..");
+
     try {
       const res = await registration(obj).unwrap();
+      setImages([]);
+      setImagesPreview([]);
       toast(res?.message, {
         icon: <span style={{ color: "green" }}>✔</span>,
         style: {
@@ -49,7 +62,46 @@ const RegisterPage = () => {
       });
     }
   };
- 
+  let counter = 0;
+
+  const uniqueId = (): number => {
+    counter += 1;
+    return counter;
+  };
+  //@ts-ignore
+  const createproductImagesChange = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    let files: File[] = Array.from(e.target.files || []);
+
+    // Assuming images and imagesPreview are properly typed arrays
+    setImages((oldImages: ProductImage[]) => []);
+    setImagesPreview((oldImages: string[]) => []);
+
+    files.forEach((file: File) => {
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setImagesPreview((oldImages: string[]) => [
+            ...oldImages,
+            reader.result as string,
+          ]);
+          // Assuming you have a valid way to create a ProductImage from the reader result
+          const newProductImage: ProductImage = {
+            id: uniqueId(), // replace with a function to generate unique IDs
+            url: reader.result as string,
+          };
+          setImages((oldImages: ProductImage[]) => [
+            ...oldImages,
+            newProductImage,
+          ]);
+        }
+      };
+
+      reader.readAsDataURL(file);
+    });
+  };
   return (
    <>
     <Toaster position="top-right" reverseOrder={false} />
@@ -112,11 +164,19 @@ const RegisterPage = () => {
                     multiple
                     type="file"
                     name="avatar"
-                    // onChange={createproductImagesChange}
+                    onChange={createproductImagesChange}
                   />
                   
                 </div>
-               
+                {imagesPreview.map((image, index) => (
+                    <Image
+                      key={index}
+                      src={image}
+                      alt="product Preview"              
+                  width={100}
+                  height={100}
+                    />
+                  ))}
               </div>
               <Button htmlType="submit">Registration</Button>
             </Form>

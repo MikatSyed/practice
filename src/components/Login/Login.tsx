@@ -4,14 +4,14 @@ import loginImage from "../../assets/Tablet login-bro.png";
 import Image from "next/image";
 import Form from "@/components/Forms/Form";
 import FormInput from "@/components/Forms/FormInput";
-import { SubmitHandler } from "react-hook-form";
-import { authSchema } from "@/schemas/auth";
-import { yupResolver } from "@hookform/resolvers/yup";
-import Link from "next/link";
 import { useUserLoginMutation } from "@/redux/api/authApi";
 import { useRouter } from "next/navigation";
 import { storeUserInfo } from "../../../services/auth.service";
-
+import { authSchema } from "@/schemas/auth";
+import { yupResolver } from "@hookform/resolvers/yup";
+import toast, { Toaster } from 'react-hot-toast';
+import Link from "next/link";
+import { signIn } from "next-auth/react";
 
 
 type FormValues = {
@@ -19,30 +19,87 @@ type FormValues = {
   password: string;
 };
 
-const LoginPage = () => {
-  const [userLogin] = useUserLoginMutation();
-  const {push} = useRouter();
+const LoginPage = ({callbackUrl}:any) => {
+  // const [userLogin] = useUserLoginMutation();
+  // const {push} = useRouter();
 
-
-  const onSubmit: SubmitHandler<FormValues> = async (data: any) => {
+  const onSubmit = async (data: any) => {
    
     try {
-       const res = await userLogin({ ...data }).unwrap();
-       console.log(res);
-       storeUserInfo({ accessToken: res?.token });
-         if (res?.token) {  
-          push("/profile");
-        
-      }
-    } catch (err: any) {
+      // const res = await userLogin({ ...data }).unwrap();
+      const res = await signIn("home-crafters", {
+        ...data,   
+        callbackUrl
+      });
      
+      // console.log(res)
+      // if (res?.token) {  
+          // push("/profile");
+          // message.success(res?.message)
+          //  toast(res?.message,
+          // {
+          //   icon:  <span style={{color:"green"}}>✔</span>,
+          //   style: {
+          //     borderRadius: '10px',
+          //     background: '#FFBF00',
+          //     color: '#fff'
+          //   }
+          // })
+      // }
+      // storeUserInfo({ accessToken: res?.token });
+     
+    } catch (err: any) {
+      // console.log(err);
+      toast(err?.data,
+        {
+          icon:  <span style={{color:"white"}}>❌</span>,
+          style: {
+            borderRadius: '10px',
+            background: 'red',
+            color: '#fff'
+          }
+        })
     }
   };
 
- 
+  // const onSubmit: SubmitHandler<FormValues> = async (data: any) => {
+  //   console.log(data);
+  //   try {
+  //     const res = await userLogin({ ...data }).unwrap();
+  //     // console.log(res)
+  //     if (res?.token) {  
+  //         push("/profile");
+  //         // message.success(res?.message)
+  //          toast(res?.message,
+  //         {
+  //           icon:  <span style={{color:"green"}}>✔</span>,
+  //           style: {
+  //             borderRadius: '10px',
+  //             background: '#FFBF00',
+  //             color: '#fff'
+  //           }
+  //         })
+  //     }
+  //     storeUserInfo({ accessToken: res?.token });
+     
+  //   } catch (err: any) {
+  //     // console.log(err);
+  //     toast(err?.data,
+  //       {
+  //         icon:  <span style={{color:"white"}}>❌</span>,
+  //         style: {
+  //           borderRadius: '10px',
+  //           background: 'red',
+  //           color: '#fff'
+  //         }
+  //       })
+  //   }
+  // };
+
   return (
   <>
-
+   <Toaster  position="top-right"
+  reverseOrder={false} />
     <Row
       justify="center"
       align="middle"
@@ -72,12 +129,12 @@ const LoginPage = () => {
                 name="password"
                 type="password"
                 size="large"
-                label="Password"
+                label="User Password"
               />
             </div>
-            <button  type="submit"  className="btn1">
+            <Button  htmlType="submit">
               Login
-            </button>
+            </Button>
           </Form>
         </div>
         <div
@@ -86,9 +143,9 @@ const LoginPage = () => {
               textAlign: "center"
             }}
           >
-          
-              <p>Do not have an account?  <Link href="/registration">Register here</Link> </p>
-           
+            <Link href="/registration">
+              <p>Donot have an account? Register here</p>
+            </Link>
           </div>
       </Col>
 
@@ -97,7 +154,6 @@ const LoginPage = () => {
       </Col>
     
     </Row>
-    
   </>
   );
 };

@@ -25,7 +25,7 @@ const ServiceCardPage = ({data}:any) => {
             } = val;
             return (
               <Col xs={24} sm={24} md={12} lg={8} xl={8} key={id}>
-                 <Link href={`/services/${id}`}>
+               
                 <div className="box shadow">
 
                   
@@ -60,7 +60,7 @@ const ServiceCardPage = ({data}:any) => {
                     <span className="service_title">{category?.title}</span>
                   </div>
                 </div>
-             </Link>
+         
               </Col>
             );
           })}

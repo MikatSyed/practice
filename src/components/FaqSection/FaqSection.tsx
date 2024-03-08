@@ -1,12 +1,12 @@
-
-import Heading from '../Hero/Heading';
+import { getAllFaqs } from '@/lib/fetch';
 import FaqPage from './FaqPage';
-import {faqData} from "./data"
+import Heading from '../Hero/Heading';
+
 
 
 const FaqSection = async() => {
-
-   
+    const faq = await getAllFaqs() 
+    const faqData = faq?.data;
    
     return (
         

@@ -15,7 +15,7 @@ const Footer = () => {
               <h2>Do You Need Help With Anything?</h2>
               <p>Receive updates, hot deals, tutorials, discounts sent straignt in your inbox every month</p>
 
-              
+             
             </div>
           </div>
 
@@ -31,7 +31,9 @@ const Footer = () => {
           ))}
         </div>
       </footer>
-     
+      <div className='legal'>
+        <span>© 2023 Home Crafters. Designd By Syed.</span>
+      </div>
     </>
   )
 }

@@ -29,9 +29,9 @@ const Contact = () => {
           <div className={styles.formGroup}>
             <input type="text" id="streetAddress" name="streetAddress" placeholder="Street Address" required />
           </div>
-          <div className={styles.formGroup}>
+          {/* <div className={styles.formGroup}>
             <textarea id="message" name="message" placeholder="Message" rows="5" required></textarea>
-          </div>
+          </div> */}
           <button type="submit" className={styles.submitButton}>Submit</button>
         </form>
     </div>

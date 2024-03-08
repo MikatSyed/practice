@@ -2,7 +2,7 @@ import React from "react";
 import { homeAbout } from "./data";
 import Heading from "../Hero/Heading";
 import styles from "../../../src/styles/about.module.css";
-import AboutImage from "../../assets/Building.png";
+import AboutImage from "../../assets/Building permit-pana.png";
 import Image from "next/image";
 
 const AboutCard = () => {

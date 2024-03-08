@@ -1,6 +1,6 @@
 
 import React from "react"
-import { awards } from "../Nav/Data"
+import { awards } from "../../components/Nav/Data"
 import Heading from "../Hero/Heading"
 
 
