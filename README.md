@@ -1,14 +1,3 @@
-# home-crafters-frontend
-
-Super Admin Credential 
- 
- Email : mikat@gmail.com
- Password : mikat123
-
- Admin Credential 
-
- Email : syed@gmail.com
- Password : mikat123
 
 {collapsed ? <>
   <div style={{ padding:'7rem 2rem'}}>  
