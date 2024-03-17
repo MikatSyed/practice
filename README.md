@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # home-crafters-frontend
 
 Super Admin Credential
@@ -19,3 +20,6 @@ JWT_SECRET= UPIOGUGGIFGJHDIHYHHFG
 NODE_ENV = development
 
 NEXTAUTH_URL=http://localhost:3000
+=======
+DATABASE_URL="postgres://postgres.ttisttbdaypyiimfluet:BP3RygruCABKtkwX@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres"
+>>>>>>> f8a27489db69c138cf8d56af6cdc16b4e08a7f04
