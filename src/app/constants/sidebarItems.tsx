@@ -56,7 +56,7 @@ export const sidebarItems = (role:string)=>{
           key: `/${role}/user`,
         },
        
-        {
+        { 
           label: " Service",
           key: "service",
           icon: setIconSize(<FaClone/>,"1.2rem"),
@@ -72,8 +72,21 @@ export const sidebarItems = (role:string)=>{
                
           ]
       },
-      
-        
+      {
+        label: <Link href={`/${role}/booking`}> Booking</Link>,
+        icon: setIconSize(<AiFillCalendar />,"1.2rem"),
+        key: `/${role}/booking`,
+      },
+        // {
+        //   label: <Link href={`/${role}/upcoming-service`}>Upcoming Services</Link>,
+        //   icon: <FaTools />,
+        //   key: `/${role}/upcoming-service`,
+        // },
+        // {
+        //   label: <Link href={`/${role}/available-service`}>Available Services</Link>,
+        //   icon: <TableOutlined />,
+        //   key: `/${role}/available-service`,
+        // },
         {
           label: <Link href={`/${role}/blog`}> Blog</Link>,
           icon: setIconSize(<FaFileAlt />,"1.2rem"),
@@ -84,7 +97,11 @@ export const sidebarItems = (role:string)=>{
           icon: setIconSize(<FaMoneyCheck />,"1.2rem"),
           key: `/${role}/faq`,
         },
-       
+        {
+          label: <Link href={`/${role}/schedule`}> Schedule </Link>,
+          icon: setIconSize(<AiFillSchedule />,"1.2rem"),
+          key: `/${role}/schedule`,
+        },
         {
           label: <Link href={`/${role}/category`}> Category</Link>,
           icon: setIconSize(<MdCategory />,"1.2rem"),
@@ -111,7 +128,11 @@ export const sidebarItems = (role:string)=>{
     
       const userSidebarItems: MenuProps["items"] = [
         ...defaultSidebarItems,
-       
+        {
+          label: <Link href={`/${role}/booking`}>Booking</Link>,
+          icon: setIconSize(<AiFillCalendar />,"1.2rem"),
+          key: `/${role}/booking`,
+        },
       ];
     
    

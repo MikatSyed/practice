@@ -2,7 +2,13 @@ import { cookies } from 'next/headers'
 
 
 let BASE_URL:string
-BASE_URL = 'http://localhost:6060/api/v1'; // Replace with your localhost URL
+if (process.env.NODE_ENV === 'development') {
+    // Development environment
+    BASE_URL = 'http://localhost:6060/api/v1'; // Replace with your localhost URL
+  } else {
+    // Production environment
+    BASE_URL = 'https://home-service-backend-ten.vercel.app/api/v1';
+  } // Replace with your localhost URL
 
 export async function getAllBlog() {
     const cookieStore = cookies()

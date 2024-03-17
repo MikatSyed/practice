@@ -18,7 +18,9 @@ const EditPage = ({params}:IDProps) => {
   const {id} = params;
   const{data} = useUserByIdQuery(id)
   const [updateUser] = useUpdateUserMutation();
-
+  const [registration] = useRegistrationMutation()
+  
+  // const departments:IDepartment[]= data?.departments;
 
   
 

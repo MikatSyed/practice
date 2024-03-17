@@ -8,6 +8,7 @@ import Services from '@/components/Services/Services';
 import UpcomingService from '@/components/UpcomingService/UpcomingService';
 import BlogCard from '../(Main)/blog/page';
 import About from '@/components/About/About';
+import Testimonial from '@/components/Testtimonial/Testtimonial';
 
 
 const Home = () => {
@@ -19,7 +20,7 @@ const Home = () => {
         <Services/>
         <Awards/>
         <UpcomingService/>
-      
+       <Testimonial />
      
         <BlogCard/>
         <FaqSection/>

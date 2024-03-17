@@ -5,8 +5,8 @@ export const getBaseUrl = (): any => {
         case 'development':
             return 'http://localhost:6060/api/v1'; // Replace with your development API URL
         case 'production':
-            return process.env.NEXT_PUBLIC_API_BASE_URL;// Replace with your production API URL
+            return 'https://home-service-backend-ten.vercel.app/api/v1';// Replace with your production API URL
         default:
-            return ' http://localhost:6060/api/v1'; // Replace with a default API URL
+            return 'https://home-service-backend-ten.vercel.app/api/v1'; // Replace with a default API URL
     }
 };

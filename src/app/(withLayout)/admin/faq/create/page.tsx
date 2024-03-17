@@ -64,7 +64,7 @@ const CreateFaqPage = () => {
       />
        <Toaster  position="top-right"
   reverseOrder={false} />
-      <h1>Add FAQ</h1>
+      <h1>Create FAQ</h1>
       <div>
         <Form submitHandler={onSubmit} >
         
@@ -81,9 +81,9 @@ const CreateFaqPage = () => {
               </Col>
        
       
-          <button type="submit" className="btn">
-            Post
-          </button>
+          <Button htmlType="submit" type="primary">
+            Add
+          </Button>
         </Form>
       </div>
     </>

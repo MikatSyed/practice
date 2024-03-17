@@ -1,6 +1,5 @@
 "use client";
-
-import { Button, Input } from "antd";
+import { Button } from "antd";
 import Link from "next/link";
 import {
   DeleteOutlined,
@@ -10,14 +9,12 @@ import {
 } from "@ant-design/icons";
 import { useState } from "react";
 import dayjs from "dayjs";
-
 import BreadCrumb from "@/components/UI/BreadCrumb";
 import ActionBar from "@/components/UI/ActionBar";
 import UMTable from "@/components/UI/Table";
 import ConfirmationModal, { ConfirmationModalProps } from "@/components/ConfirmationModal/ConfirmationModal";
 import toast, { Toaster } from "react-hot-toast";
-import { useDeleteServiceMutation, useServicesQuery } from "@/redux/api/servicesApi";
-import { FaPlus } from "react-icons/fa6";
+import { useBookingsQuery, useDeleteBookingMutation } from "@/redux/api/bookingApi";
 
 
 
@@ -37,22 +34,17 @@ const AdminPage = () => {
   query["sortBy"] = sortBy;
   query["sortOrder"] = sortOrder;
 
-
-  
-  
-  const { data, isLoading } = useServicesQuery({ ...query })
+  const { data, isLoading } = useBookingsQuery(undefined)
   console.log(data);
-  const [ deleteService] = useDeleteServiceMutation();
-  const services = data?.data;
-  console.log(services);
-  const res = services?.filter((data:any)=> data.availbility === "available" )
-  console.log(res);
+  
+  const [ deleteBooking] = useDeleteBookingMutation();
+  const booking = data?.data;
   const meta = data?.meta;
 
 
   const handleOk = async () => {
     console.log(id);
-    const res = await deleteService(id).unwrap()
+    const res = await deleteBooking(id).unwrap()
     setIsModalVisible(false);
     toast(res?.message,
     {
@@ -73,25 +65,49 @@ const AdminPage = () => {
   const columns = [
   
     {
-      title: "Name",
-      dataIndex: "name",
+      title: "bookingDate",
+      dataIndex: "bookingDate",
+    },
+
+    {
+      title: "User Name",
+      dataIndex: ["user", "name"], // Access user name through the "user" relation
     },
     {
-      title: "Price",
-      dataIndex: "price",
+      title: "Service Name",
+      dataIndex: ["service", "name"], // Access service name through the "service" relation
     },
     {
-      title: "Location",
-      dataIndex: "location",
+      title: "Slot Title",
+      dataIndex: ["slot", "startTime"], // Access slot title through the "slot" relation
     },
     {
-      title: "Category",
-      dataIndex: "category",
-      render: (category:any) => category?.title
+      title: "Status",
+      dataIndex: "status",
+      render: function (status: string) {
+        const cellStyle: React.CSSProperties = {
+          backgroundColor: status === "pending" ? "#ff98001a" : "#25b5791a",
+          color: status === "pending" ? "#ff9800" : "#25b579",
+          textAlign:  "center"
+        };
+  
+        return <div style={cellStyle}>{status}</div>;
+      },
     },
-   
-    
-   
+    {
+      title: "isPaid",
+      dataIndex: "isPaid",
+      render: function (isPaid: boolean) {
+        const cellStyle: React.CSSProperties = {
+          backgroundColor: isPaid ? "#25b5791a" : "#ff98001a",
+          color: isPaid ? "#25b579" : "#ff9800",
+          textAlign:  "center"
+        };
+  
+        return <div style={cellStyle}>{isPaid ? "Complete" : "Incomplete"}</div>;
+      },
+    },
+
     {
       title: "Created at",
       dataIndex: "createdAt",
@@ -111,7 +127,7 @@ const AdminPage = () => {
                 <EyeOutlined />
               </Button>
             </Link> */}
-            <Link href={`/admin/available-service/edit/${data}`}>
+            <Link href={`/admin/booking/edit/${data}`}>
               <Button 
                 style={{
                   margin: "0px 3px",
@@ -119,7 +135,7 @@ const AdminPage = () => {
                 onClick={() => console.log(data)}
                 
               >
-                <EditOutlined />Edit
+                <EditOutlined />Change Status
               </Button>
             </Link>
             <Button
@@ -168,44 +184,43 @@ const AdminPage = () => {
       <BreadCrumb
         items={[
           {
-            label: "admin",
+            label: "Admin",
             link: "/admin",
           },
+         
         ]}
       />
         <Toaster  position="top-right"
   reverseOrder={false} />
-      
-      <div style={{display:'flex', justifyContent:'space-between'}}>
-  
-       <div>
-       <ActionBar title="Service List"/>
-       </div>
-       <div> 
-      <Link href="/admin/available-service/create">
+      <ActionBar title="Booking List">
+      <ConfirmationModal {...modalProps} />
 
-      <button className="btn"
-        >
-        <FaPlus/>Add Service</button>
-      </Link>
+        {/* <Input
+          size="large"
+          placeholder="Search"
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{
+            width: "20%",
+          }}
+        /> */}
+        <div>
         
-      
-        {(!!sortBy || !!sortOrder ) && (
-          <Button
-            style={{ margin: "0px 5px" }}
-            type="primary"
-            onClick={resetFilters}
-          >
-            <ReloadOutlined />
-          </Button>
-        )}
+          {(!!sortBy || !!sortOrder ) && (
+            <Button
+              style={{ margin: "0px 5px" }}
+              type="primary"
+              onClick={resetFilters}
+            >
+              <ReloadOutlined />
+            </Button>
+          )}
         </div>
-      </div>
+      </ActionBar>
 
       <UMTable
         loading={isLoading}
         columns={columns}
-        dataSource={res}
+        dataSource={booking}
         pageSize={size}
         totalPages={meta?.total}
         showSizeChanger={true}

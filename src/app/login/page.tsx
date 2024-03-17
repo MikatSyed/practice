@@ -8,11 +8,11 @@ export const metadata: Metadata = {
   };
 
   
-const Login = ({searchParams:{callbackUrl}}:any) => {
+const Login = () => {
 
     return (
         <div>
-            <LoginPage callbackUrl={callbackUrl || "/profile"}/>
+            <LoginPage />
            
         </div>
     );

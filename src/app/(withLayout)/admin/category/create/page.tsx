@@ -7,8 +7,7 @@ import { useAddCategoryMutation } from "@/redux/api/categoryApi";
 import { Button, Col, Row, message } from "antd";
 import Image from "next/image";
 import { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
-import { TiTick } from "react-icons/ti";
+import toast from "react-hot-toast";
 
 interface CategoryImage {
   id: number;
@@ -28,22 +27,18 @@ const CreateCategoryPage = () => {
     message.loading("Creating..");
 
     try {
-      const res:any = await addCategory(obj).unwrap();
-     
+      const res = await addCategory(obj).unwrap();
       console.log(res);
       setImages([]);
       setImagesPreview([]);
-     
-    
-      toast(res?.message || "Category Created Successfully", {
-        icon: <span style={{ color: "green" }}><TiTick/></span>,
+      toast("Category created successfully", {
+        icon: <span style={{ color: "green" }}>✔</span>,
         style: {
           borderRadius: "10px",
-          background: "#27ae60",
+          background: "#FFBF00",
           color: "#fff",
         },
       });
-    
     } catch (err: any) {
       toast(err?.data, {
         icon: <span style={{ color: "white" }}>❌</span>,
@@ -100,14 +95,13 @@ const CreateCategoryPage = () => {
 
   return (
     <div>
-      <Toaster position="top-right" reverseOrder={false} />
       <BreadCrumb
         items={[
           { label: `${base}`, link: `/${base}` },
           { label: "category", link: `/${base}/category` },
         ]}
       />
-      <h1>Add Category</h1>
+      <h1>Create Category</h1>
       <Form submitHandler={onSubmit}>
       
           <Col
@@ -149,9 +143,9 @@ const CreateCategoryPage = () => {
             ))}
           </Col>
        
-        <button className="btn" type="submit">
-          Add Category
-        </button>
+        <Button type="primary" htmlType="submit">
+          add
+        </Button>
       </Form>
     </div>
   );

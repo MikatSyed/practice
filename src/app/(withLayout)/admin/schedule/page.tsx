@@ -5,14 +5,16 @@ import { Button, message } from "antd";
 import Link from "next/link";
 import { useState } from "react";
 import dayjs from "dayjs";
-import { DeleteOutlined, EditOutlined, ReloadOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import ActionBar from "@/components/UI/ActionBar";
+import Input from "antd/es/input/Input";
 import {RedoOutlined} from "@ant-design/icons"
+import { useDebounced } from "@/redux/hook";
 import ConfirmationModal, { ConfirmationModalProps } from "@/components/ConfirmationModal/ConfirmationModal";
-import { useCategoriesQuery, useDeleteCategoryMutation } from "@/redux/api/categoryApi";
+import { useDeleteTimeSlotsMutation, useTimeSlotsQuery } from "@/redux/api/timeSlot";
 import { FaPlus } from "react-icons/fa6";
 
-const ManageDepartmentPage = () => {
+const ManageSchedulePage = () => {
   const [page, setPage] = useState<number>(1);
   const [size, setSize] = useState<number>(10);
   const [sortBy, setSortBy] = useState<string>("");
@@ -22,7 +24,7 @@ const ManageDepartmentPage = () => {
   const [id,setId] = useState<string>("")
 
 
-  const [deleteCategory] = useDeleteCategoryMutation();
+  const [deleteDepartment] = useDeleteTimeSlotsMutation();
 
   const query: Record<string, any> = {};
 
@@ -33,11 +35,20 @@ const ManageDepartmentPage = () => {
   query["sortOrder"] = sortOrder;
   // query["searchTerm"] = searchTerm;
 
+  const debouncedTerm = useDebounced({
+    searchQuery : searchTerm,
+    delay: 600
+  })
+ 
 
-  const { data, isLoading }:any = useCategoriesQuery({ ...query });
-  const meta= data?.meta;
+  if(!!debouncedTerm){
+      query["searchTerm"] = debouncedTerm;
+  }
 
-  
+  const { data, isLoading } = useTimeSlotsQuery({ ...query });
+  const departments = data?.data;
+  console.log(departments);
+  const meta = data?.meta;
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -57,24 +68,28 @@ const ManageDepartmentPage = () => {
   };
   
   const handleOk = async () => {
-    await deleteCategory(id)
+    await deleteDepartment(id)
     setIsModalVisible(false);
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
-  }
+  };
+
+  
+
+
+
 
   const columns = [
     {
-      title: "Title",
-      dataIndex: "title",
+      title: "Schedule",
+      dataIndex: "startTime",
     },
     {
       title: "CreatedAt",
       dataIndex: "createdAt",
       render: function (data: any) {
-        console.log(data);
         return data && dayjs(data).format("MMM D, YYYY hh:mm A");
       },
       sorter: true,
@@ -84,7 +99,7 @@ const ManageDepartmentPage = () => {
       render: function (data: any) {
         return (
           <>
-            <Link href={`/admin/category/edit/${data?.id}`}>
+            <Link href={`/admin/schedule/edit/${data?.id}`}>
               <Button
                 style={{
                   margin: "0px 5px",
@@ -141,42 +156,35 @@ const ManageDepartmentPage = () => {
       />
         <ConfirmationModal {...modalProps} />
 
-     
+      <ActionBar title="Schedule List">
+        <Input
+          type="text"
+          size="large"
+          placeholder="Searching..."
+          style={{ width: "20%" }}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
 
-      <div style={{display:'flex', justifyContent:'space-between'}}>
-  
-  <div>
-  <ActionBar title="Category List"/>
-  </div>
-  <div> 
- <Link href="/admin/category/create">
+        <div>
+          <Link href="/admin/schedule/create">
+            <button className="btn"><FaPlus/>Add Schedule</button>
+          </Link>
 
- <button className="btn"
-   >
-   <FaPlus/>Add Category</button>
- </Link>
-   
- 
-   {(!!sortBy || !!sortOrder ) && (
-     <Button
-       style={{ margin: "0px 5px" }}
-       type="primary"
-       onClick={resetFilters}
-     >
-       <ReloadOutlined />
-     </Button>
-   )}
-   </div>
- </div>
+        {(!!sortBy || !!sortOrder || !!searchTerm) && (
+          <Button type="primary" style={{ margin: "0px 5px" }} onClick={resetFilters}><RedoOutlined/></Button>
+        )}
+
+        </div>
+      </ActionBar>
 
       <UMTable
-        dataSource={ data?.data}
+        dataSource={departments}
         columns={columns}
         loading={isLoading}
         onTableChange={onTableChange}
         onPaginationChange={onPaginationChange}
         pageSize={size}
-        totalPages={meta}
+        totalPages={meta?.total}
         showSizeChanger={true}
         showPagination={true}
         scroll={true}
@@ -185,4 +193,4 @@ const ManageDepartmentPage = () => {
   );
 };
 
-export default ManageDepartmentPage;
+export default ManageSchedulePage;

@@ -19,34 +19,34 @@ type FormValues = {
   password: string;
 };
 
-const LoginPage = ({callbackUrl}:any) => {
-  // const [userLogin] = useUserLoginMutation();
-  // const {push} = useRouter();
+const LoginPage = () => {
+  const [userLogin] = useUserLoginMutation();
+  const {push} = useRouter();
 
   const onSubmit = async (data: any) => {
    
     try {
-      // const res = await userLogin({ ...data }).unwrap();
-      const res = await signIn("home-crafters", {
-        ...data,   
-        callbackUrl
-      });
+      const res = await userLogin({ ...data }).unwrap();
+      // const res = await signIn("home-crafters", {
+      //   ...data,   
+      //   callbackUrl
+      // });
      
       // console.log(res)
-      // if (res?.token) {  
-          // push("/profile");
-          // message.success(res?.message)
-          //  toast(res?.message,
-          // {
-          //   icon:  <span style={{color:"green"}}>✔</span>,
-          //   style: {
-          //     borderRadius: '10px',
-          //     background: '#FFBF00',
-          //     color: '#fff'
-          //   }
-          // })
-      // }
-      // storeUserInfo({ accessToken: res?.token });
+      if (res?.token) {  
+          push("/profile");
+        
+           toast(res?.message,
+          {
+            icon:  <span style={{color:"green"}}>✔</span>,
+            style: {
+              borderRadius: '10px',
+              background: '#FFBF00',
+              color: '#fff'
+            }
+          })
+      }
+      storeUserInfo({ accessToken: res?.token });
      
     } catch (err: any) {
       // console.log(err);
