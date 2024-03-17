@@ -18,7 +18,6 @@ import { useDeleteUserMutation, useUsersQuery } from "@/redux/api/userApi";
 import ConfirmationModal, { ConfirmationModalProps } from "@/components/ConfirmationModal/ConfirmationModal";
 import toast, { Toaster } from "react-hot-toast";
 import { FaPlus } from "react-icons/fa";
-import UserCreateModal from "@/components/Modal/CreateUserModal";
 import { useRegistrationMutation } from "@/redux/api/authApi";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { adminSchema } from "@/schemas/admin";
